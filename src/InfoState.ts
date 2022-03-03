@@ -7,7 +7,6 @@ export class InfoState {
     regretSum: number[]
     strategySum: number[]
 
-    util: number
     visit: number
 
     constructor(gameState: GameState, rpsCard: RPSCard) {
@@ -17,7 +16,6 @@ export class InfoState {
         this.regretSum = new Array(this.actions.length).fill(0)
         this.strategySum = new Array(this.actions.length).fill(0)
 
-        this.util = 0
         this.visit = 0
     }
 
@@ -32,5 +30,44 @@ export class InfoState {
         }
     }
 
-    
+    getAverageStrategy(): number[] {
+        const normalizingSum = this.strategySum.reduce((accum, val) => accum+val)
+        if (normalizingSum > 0) {
+            return this.strategySum.map((val) => val/normalizingSum)
+        } else {
+            const add = 1/this.strategySum.length
+            return new Array(this.strategySum.length).fill(add)
+        }
+    }
+
+    getAction(): string {
+        function weightedSample<T>(weight: number[], arr: T[]): T {
+            const r = Math.random()
+            let cumulativeProb = 0
+            for (let i=0; i<arr.length; i++) {
+                cumulativeProb += weight[i]
+                if (r < cumulativeProb) {
+                    return arr[i]
+                }
+            }
+            return arr[arr.length-1]
+        }
+        const strategy = this.getStrategy()
+        const action = weightedSample(strategy, this.actions)
+        return action
+    }
+
+    accumulateRegret(regret: number[]) {
+        this.regretSum = this.regretSum.map((val, idx) => val + regret[idx])
+    }
+
+    accumulateStrategy(strategy: number[]) {
+        this.strategySum = this.strategySum.map((val, idx) => val + strategy[idx])
+    }
+
+    toString(): string {
+        const averageStrategy = this.getAverageStrategy()
+        const actionStrategy = this.actions.map((action, idx) => `${action}${averageStrategy[idx]}`)
+        return actionStrategy.join(', ')
+    }
 }

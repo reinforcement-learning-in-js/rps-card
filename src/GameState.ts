@@ -1,4 +1,5 @@
 export interface Deck {
+    [key: string]: number
     R: number
     P: number
     S: number
@@ -8,5 +9,5 @@ export interface Deck {
 export interface GameState {
     myCards: Deck
     oppCards: Deck
-    wins: number[]
+    point: number[]
 }
