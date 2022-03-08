@@ -6,7 +6,7 @@ const d: Deck = {
     R: 1,
     P: 1,
     S: 1,
-    J: 1
+    J: 0
 }
 
 const state: GameState = {
@@ -17,6 +17,6 @@ const state: GameState = {
 
 const rule = new RPSCard()
 const graph: GameGraph = new GameGraph(rule)
-graph.train(state, 10000)
+graph.train(state, 100000)
 
 graph.nodeMap.forEach((state, key) => console.log(`${key} : ${state.toString()}`))

@@ -3,7 +3,7 @@ import { InfoState } from './InfoState'
 import { RPSCard } from './RPSCard'
 
 const d: Deck = {
-    R: 0,
+    R: 1,
     P: 1,
     S: 1,
     J: 1
